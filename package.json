@@ -1,0 +1,14 @@
+{
+  "name": "andante-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Andante marketing website — static HTML + Tailwind CSS v4.",
+  "scripts": {
+    "build": "tailwindcss -i styles.css -o assets/css/site.css --minify",
+    "watch": "tailwindcss -i styles.css -o assets/css/site.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
