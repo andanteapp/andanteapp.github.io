@@ -38,6 +38,45 @@ function initAndante() {
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
+  /* Animated counters ([data-count]): ease from 0 to the target value in view. */
+  var counters = document.querySelectorAll('[data-count]');
+  if ('IntersectionObserver' in window && counters.length) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        cio.unobserve(el);
+        var target = parseFloat(el.getAttribute('data-count')) || 0;
+        var dur = parseInt(el.getAttribute('data-duration'), 10) || 1600;
+        var start = null;
+        function step(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased);
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  } else {
+    counters.forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
+  }
+
+  /* Rotating word ticker ([.vg-tick]): cycle the words in crossfade every 3s. */
+  document.querySelectorAll('.vg-tick').forEach(function (tick) {
+    var words = Array.prototype.slice.call(tick.querySelectorAll('.vg-tick-word'));
+    if (words.length < 2) return;
+    var i = 0;
+    words[0].classList.add('active');
+    setInterval(function () {
+      words[i].classList.remove('active');
+      i = (i + 1) % words.length;
+      words[i].classList.add('active');
+    }, 3000);
+  });
+
   /* References accordion (Evidence page) */
   var refToggle = document.getElementById('references-toggle');
   var refBody = document.getElementById('references-body');
@@ -161,16 +200,46 @@ function initAndante() {
     carousel.addEventListener('mouseleave', function () { clearInterval(timer); timer = start(); });
   });
 
-  /* Demo CTA placeholder ----------
-     All "Book a demo" / "Partner on a study" actions point at #book-a-demo.
-     Wire the real destination here (mailto:, booking link or modal). */
-  document.querySelectorAll('a[href="#book-a-demo"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      e.preventDefault();
-      // TODO: replace with the real demo request flow (email or booking form).
-      console.log('Demo/Call-to-action requested — wire a destination here.');
-    });
+  /* Demo request modal: opens on any "Book a demo" CTA and sends a pre-filled email. */
+  var modal = document.getElementById('book-a-demo-modal');
+  var form = document.getElementById('book-a-demo-form');
+  function openModal(e) {
+    if (e) e.preventDefault();
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  document.querySelectorAll('a[href*="book-a-demo"]').forEach(function (a) {
+    a.addEventListener('click', openModal);
   });
+  if (modal) {
+    var closeBtn = document.getElementById('book-a-demo-close');
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  }
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var d = new FormData(form);
+      var name = (d.get('name') || '').trim();
+      var email = (d.get('email') || '').trim();
+      var msg = (d.get('message') || '').trim();
+      var subject = 'Andante demo request' + (name ? ' \u2014 ' + name : '');
+      var body = 'Name: ' + name + '\n'
+        + 'Email: ' + email + '\n\n'
+        + 'Message:\n' + msg;
+      var mailto = 'mailto:mikelgain@gmail.com?subject='
+        + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+      closeModal();
+    });
+  }
 }
 
 if (document.readyState === 'loading') {

@@ -58,7 +58,7 @@
     </header>
 
     <!-- ============ HERO ============ -->
-    <section class="bg-mist min-h-dvh flex flex-col justify-center">
+    <section class="bg-gradient-to-b from-white via-mist to-white min-h-dvh flex flex-col justify-center">
         <div
             class="max-w-content mx-auto px-6 grid md:grid-cols-2 gap-12 md:gap-16 pt-16 md:pt-[85px] pb-16 md:pb-[95px]">
             <div>
@@ -74,7 +74,13 @@
                     next one.
                 </p>
                 <p class="mt-5 font-semibold">No wearables. No extra kit. Just a phone and headphones.</p>
-                <p class="mt-1 text-sky">For physiotherapists, home care providers and clinics.</p>
+                <p class="mt-1 text-sky">
+                    <span class="vg-tick font-semibold"><span class="vg-tick-base">For home care providers</span>
+                        <span class="vg-tick-word">For physiotherapists</span>
+                        <span class="vg-tick-word">For home care providers</span>
+                        <span class="vg-tick-word">For clinics and teams</span>
+                    </span>.
+                </p>
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a href="#book-a-demo"
                         class="inline-flex items-center justify-center rounded-full bg-navy text-white font-medium text-body px-6 py-[14px] hover:bg-sky transition-colors">Book
@@ -160,6 +166,7 @@
                 <img src="assets/img/app-walking-session.png" data-lightbox
                     alt="The Andante app showing an active walking session with music playing"
                     class="w-full h-auto md:absolute md:inset-0 md:h-full md:w-full md:object-contain rounded-card cursor-zoom-in">
+
             </div>
         </div>
     </section>
@@ -183,6 +190,7 @@
                         </div>
                     </div>
                     <div class="carousel-dots" aria-label="Slides"></div>
+
                 </div>
             </div>
             <div class="order-1 md:order-2">
@@ -239,7 +247,7 @@
             </div>
 
             <div data-reveal
-                class="mt-6 bg-navy text-white rounded-card p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                class="mt-6 bg-navy from-navy to-sky text-white rounded-card p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                     <h2 class="text-h3 font-bold">Research and pilot partners</h2>
                     <p class="mt-3 max-w-auto">Run a study or pilot with a music-based walking programme delivered by
@@ -282,54 +290,6 @@
                         beat-accentuated music nearly doubled weekly physical activity.<sup>5</sup></p>
                 </article>
             </div>
-        </div>
-    </section>
-
-    <!-- Tested with ExWell Medical -->
-    <section id="ExWell" class="bg-white min-h-dvh flex flex-col justify-center">
-        <div class="max-w-content mx-auto px-6 py-16 md:py-20">
-            <h2 class="text-h1 font-semibold tracking-tight leading-tight">
-                What we have tested with ExWell Medical
-            </h2>
-            <p class="mt-4 max-w-auto">
-                ExWell Medical runs community-based medical exercise programmes for people living with chronic illness,
-                and gave us access to participants for a research study.
-            </p>
-
-            <div class="grid md:grid-cols-3 gap-6 mt-10">
-                <article data-reveal class="bg-white rounded-card p-8 shadow-brand">
-                    <h3 class="text-h3 font-bold">Steps sync to the beat</h3>
-                    <p class="mt-3">Andante enables walkers to sync their steps to the music, using only a smartphone;
-                        this is called entrainment. All participants synchronised their steps to the beat.</p>
-                </article>
-                <article data-reveal class="bg-navy text-white rounded-card p-8 shadow-brand">
-                    <p class="text-6xl md:text-7xl font-semibold leading-none">75%</p>
-                    <h3 class="mt-3 text-h3 font-bold">of participants unconsciously followed Andante's tempo ramps</h3>
-                </article>
-                <article data-reveal class="bg-white rounded-card p-8 shadow-brand">
-                    <h3 class="text-h3 font-bold">Would use it again</h3>
-                    <p class="mt-3">Participants loved it, and all of them said they would use it again.</p>
-                </article>
-            </div>
-
-            <div data-reveal class="carousel mx-auto max-w-[760px] mt-12" data-autoplay="5000">
-                <div class="carousel-slides">
-                    <div class="carousel-slide active">
-                        <blockquote class="m-0 mx-auto max-w-[720px] text-center">
-                            <p class="text-2xl font-semibold leading-snug tracking-tight">
-                                "You weren't aware of your steps anymore… another part of you was in control."</p>
-                            <footer class="mt-2 text-navy/70">ExWell Medical participant</footer>
-                        </blockquote>
-                    </div>
-                    <div class="carousel-slide">
-                        <blockquote class="m-0 mx-auto max-w-[720px] text-center">
-                            <p class="text-2xl font-semibold leading-snug tracking-tight">
-                                "When music comes on, I can't sit still."</p>
-                            <footer class="mt-2 text-navy/70">ExWell Medical participant</footer>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
 
             <p data-reveal class="mt-12 max-w-[640px]">
                 Full results are being prepared for peer-reviewed publication.<sup>6</sup>
@@ -357,6 +317,55 @@
                                 class="text-sky underline underline-offset-2">Article</a></li>
                         <li>Andante × ExWell Medical study (in preparation).</li>
                     </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tested with ExWell Medical -->
+    <section id="ExWell" class="bg-white min-h-dvh flex flex-col justify-center">
+        <div class="max-w-content mx-auto px-6 py-16 md:py-20">
+            <h2 class="text-h1 font-semibold tracking-tight leading-tight">
+                What we have tested with ExWell Medical
+            </h2>
+            <p class="mt-4 max-w-auto">
+                ExWell Medical runs community-based medical exercise programmes for people living with chronic illness,
+                and gave us access to participants for a research study.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-6 mt-10">
+                <article data-reveal class="bg-white rounded-card p-8 shadow-brand">
+                    <h3 class="text-h3 font-bold">Steps sync to the beat</h3>
+                    <p class="mt-3">Andante enables walkers to sync their steps to the music, using only a smartphone;
+                        this is called entrainment. All participants synchronised their steps to the beat.</p>
+                </article>
+                <article data-reveal class="bg-navy text-white rounded-card p-8 shadow-brand">
+                    <p class="text-6xl md:text-7xl font-semibold leading-none"><span data-count="75"
+                            data-duration="1800">0</span>%</p>
+                    <h3 class="mt-3 text-h3 font-bold">of participants unconsciously followed Andante's tempo ramps</h3>
+                </article>
+                <article data-reveal class="bg-white rounded-card p-8 shadow-brand">
+                    <h3 class="text-h3 font-bold">Would use it again</h3>
+                    <p class="mt-3">Participants loved it, and all of them said they would use it again.</p>
+                </article>
+            </div>
+
+            <div data-reveal class="carousel mx-auto max-w-[760px] mt-12" data-autoplay="5000">
+                <div class="carousel-slides">
+                    <div class="carousel-slide active">
+                        <blockquote class="m-0 mx-auto max-w-[720px] text-center">
+                            <p class="text-2xl font-semibold leading-snug tracking-tight">
+                                "You weren't aware of your steps anymore… another part of you was in control."</p>
+                            <footer class="mt-2 text-navy/70">ExWell Medical participant</footer>
+                        </blockquote>
+                    </div>
+                    <div class="carousel-slide">
+                        <blockquote class="m-0 mx-auto max-w-[720px] text-center">
+                            <p class="text-2xl font-semibold leading-snug tracking-tight">
+                                "When music comes on, I can't sit still."</p>
+                            <footer class="mt-2 text-navy/70">ExWell Medical participant</footer>
+                        </blockquote>
+                    </div>
                 </div>
             </div>
         </div>
@@ -479,6 +488,36 @@
             </div>
         </div>
     </footer>
+
+    <!-- Demo request modal -->
+    <div id="book-a-demo-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-card rounded-card bg-white p-8 md:p-10 shadow-brand text-navy max-w-[520px] w-full mx-4 relative">
+            <button id="book-a-demo-close" class="modal-close" aria-label="Close">&times;</button>
+            <h3 class="text-h3 font-bold tracking-tight">Book a demo</h3>
+            <p class="mt-2 text-note">Tell us a little about yourself and we&rsquo;ll be in touch to schedule a live
+                demo of Andante.</p>
+            <form id="book-a-demo-form" class="mt-6 grid gap-4">
+                <label class="text-note font-medium">
+                    Name
+                    <input type="text" name="name" required placeholder="Your name"
+                        class="mt-1 w-full border border-border rounded-card px-4 py-3 text-body focus:outline-none focus:border-sky">
+                </label>
+                <label class="text-note font-medium">
+                    Email
+                    <input type="email" name="email" required placeholder="you@clinic.com"
+                        class="mt-1 w-full border border-border rounded-card px-4 py-3 text-body focus:outline-none focus:border-sky">
+                </label>
+                <label class="text-note font-medium">
+                    Message <span class="font-normal">(optional)</span>
+                    <textarea name="message" rows="3" placeholder="How could Andante help your service?"
+                        class="mt-1 w-full border border-border rounded-card px-4 py-3 text-body focus:outline-none focus:border-sky resize-none"></textarea>
+                </label>
+                <button type="submit"
+                    class="mt-2 inline-flex items-center justify-center rounded-full bg-navy text-white font-medium text-body px-6 py-[14px] hover:bg-sky transition-colors">Request
+                    a demo</button>
+            </form>
+        </div>
+    </div>
 
 </body>
 

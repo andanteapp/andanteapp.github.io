@@ -100,16 +100,93 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Scroll-reveal base (element starts hidden; scripts.js adds .is-visible) */
+/* Scroll-reveal base: subtle fade + blur-to-sharp (element starts hidden) */
 [data-reveal] {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    filter: blur(6px);
+    transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
 }
 
 [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
+}
+
+/* === Rotating word ticker (crossfade via .active; no vertical slide) === */
+.vg-tick {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    height: 1.35em;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.vg-tick-base {
+    visibility: hidden; /* invisible replica sizing the wrapper to the longest word */
+}
+.vg-tick-word {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.35em;
+    line-height: 1.35em;
+    opacity: 0;
+    transform: translateY(7px);
+    filter: blur(3px);
+    will-change: opacity, transform, filter;
+    transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+}
+.vg-tick-word.active {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* === Demo request modal (opened by the "Book a demo" CTAs) === */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(10, 24, 43, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-card {
+    transform: translateY(16px) scale(0.98);
+    transition: transform 0.2s ease;
+}
+.modal-overlay.open .modal-card {
+    transform: none;
+}
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #2E598F;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.modal-close:hover {
+    background: rgba(46, 89, 143, 0.08);
 }
 
 /* === Lightbox (fullscreen image viewer) — opened by scripts.js === */
