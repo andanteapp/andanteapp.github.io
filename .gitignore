@@ -1,6 +1,11 @@
 ### IA ###
 .agent/
 
+### Internal source documents (copy docx, wireframes, design system) ###
+# Kept in the working tree for reference, never published: this repo and its
+# GitHub Pages site are public.
+agent/
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
