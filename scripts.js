@@ -200,12 +200,47 @@ function initAndante() {
     carousel.addEventListener('mouseleave', function () { clearInterval(timer); timer = start(); });
   });
 
-  /* Demo request modal: opens on any "Book a demo" CTA and sends a pre-filled email. */
+  /* Demo request modal: opens on any "Book a demo" CTA and POSTs the form to
+     FormSubmit.co (its AJAX endpoint), so the request lands in the inbox with no
+     backend. The recipient is NOT hardcoded here — it is read from the form's
+     action attribute in index.html, and only rewritten to the /ajax/ URL below.
+     If the POST cannot be made (offline, blocked, no web server), the visitor
+     gets a pre-filled mailto link as a fallback. */
   var modal = document.getElementById('book-a-demo-modal');
   var form = document.getElementById('book-a-demo-form');
+  var statusEl = document.getElementById('book-a-demo-status');
+  var submitBtn = document.getElementById('book-a-demo-submit');
+  var subjectEl = document.getElementById('book-a-demo-subject');
+  var actionUrl = form ? (form.getAttribute('action') || '') : '';
+  var recipient = actionUrl.replace(/^https?:\/\/(?:www\.)?formsubmit\.co\//, '');
+  var endpoint = actionUrl.replace('formsubmit.co/', 'formsubmit.co/ajax/');
+  var submitLabel = 'Request a demo';
+
+  function setStatus(state, text) {
+    if (!statusEl) return;
+    if (!state) {
+      statusEl.hidden = true;
+      statusEl.removeAttribute('data-state');
+      statusEl.textContent = '';
+      return;
+    }
+    statusEl.hidden = false;
+    statusEl.setAttribute('data-state', state);
+    statusEl.textContent = text || '';
+  }
+  function resetSubmitBtn() {
+    if (!submitBtn) return;
+    submitBtn.disabled = false;
+    submitBtn.textContent = submitLabel;
+  }
   function openModal(e) {
     if (e) e.preventDefault();
     if (!modal) return;
+    // Reopening starts a fresh request: clear the previous status, re-enable the button.
+    if (statusEl && statusEl.getAttribute('data-state') !== 'pending') {
+      setStatus(null);
+      resetSubmitBtn();
+    }
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
   }
@@ -227,17 +262,78 @@ function initAndante() {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var d = new FormData(form);
-      var name = (d.get('name') || '').trim();
-      var email = (d.get('email') || '').trim();
-      var msg = (d.get('message') || '').trim();
-      var subject = 'Andante demo request' + (name ? ' \u2014 ' + name : '');
-      var body = 'Name: ' + name + '\n'
-        + 'Email: ' + email + '\n\n'
-        + 'Message:\n' + msg;
-      var mailto = 'mailto:mikelgain@gmail.com?subject='
-        + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      window.location.href = mailto;
-      closeModal();
+      if (String(d.get('_honey') || '').trim()) return; // honeypot: silently drop bots
+
+      var name = String(d.get('name') || '').trim();
+      var email = String(d.get('email') || '').trim();
+      var msg = String(d.get('message') || '').trim();
+      if (subjectEl) subjectEl.value = 'Andante demo request' + (name ? ' \u2014 ' + name : '');
+      d.set('_subject', subjectEl ? subjectEl.value : 'Andante demo request');
+
+      var mailto = 'mailto:' + recipient + '?subject=' + encodeURIComponent('Andante demo request')
+        + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg);
+
+      // Appends the "send us an email" fallback link to the status line.
+      function appendMailto() {
+        if (!statusEl) return;
+        var a = document.createElement('a');
+        a.href = mailto;
+        a.textContent = 'send us an email';
+        statusEl.appendChild(a);
+        statusEl.appendChild(document.createTextNode('.'));
+      }
+      function fail(detail) {
+        setStatus('error', (detail ? detail + ' ' : '') + 'Please try again, or ');
+        appendMailto();
+        resetSubmitBtn();
+      }
+
+      // Opened straight from disk: FormSubmit refuses pages browsed as files
+      // ("open this page through a web server"), so nothing is sent. Say that
+      // plainly instead of surfacing the endpoint's raw warning.
+      if (window.location.protocol === 'file:') {
+        setStatus('notice', 'Local preview: the form only sends from a web server. Serve this folder over http:// to test it, or ');
+        appendMailto();
+        return;
+      }
+
+      setStatus('pending', 'Sending your request\u2026');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending\u2026';
+      }
+
+      // FormData keeps this a "simple" POST (no CORS preflight), which is the
+      // shape FormSubmit documents for its AJAX endpoint.
+      fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: d })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (r) {
+          if (r.ok && String(r.data.success) === 'true') {
+            setStatus('success', 'Thanks' + (name ? ', ' + name.split(' ')[0] : '')
+              + '! Your request is on its way \u2014 we\u2019ll be in touch shortly.');
+            form.reset();
+            if (subjectEl) subjectEl.value = 'Andante demo request';
+            resetSubmitBtn();
+          } else {
+            var raw = (r.data && r.data.message) || '';
+            // FormSubmit answers 200 even when it refuses, e.g. while the inbox
+            // still needs its one-time activation.
+            if (/activation/i.test(raw)) {
+              setStatus('notice', 'Our contact inbox is not live yet, so this request was not delivered. ');
+            } else {
+              setStatus('error', (raw || 'We could not send your request.') + ' ');
+            }
+            appendMailto();
+            resetSubmitBtn();
+          }
+        })
+        .catch(function () {
+          fail('We could not reach our form service.');
+        });
     });
   }
 }

@@ -476,8 +476,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
-                    <a href="mailto:mikelgain@gmail.com"
-                        class="hover:text-sky transition-colors">mikelgain@gmail.com</a>
+                    <a href="mailto:andantecontact@proton.me"
+                        class="hover:text-sky transition-colors">andantecontact@proton.me</a>
                 </div>
             </div>
             <div class="flex flex-col items-start md:items-end gap-4">
@@ -496,7 +496,19 @@
             <h3 class="text-h3 font-bold tracking-tight">Book a demo</h3>
             <p class="mt-2 text-note">Tell us a little about yourself and we&rsquo;ll be in touch to schedule a live
                 demo of Andante.</p>
-            <form id="book-a-demo-form" class="mt-6 grid gap-4">
+            <!-- Demo request form — delivered by FormSubmit.co (no backend needed).
+                 The Andante contact inbox is the single source of truth here:
+                 scripts.js derives both the /ajax/ endpoint and the mailto
+                 fallback from this action attribute, so never hardcode it in JS. -->
+            <form id="book-a-demo-form" class="mt-6 grid gap-4"
+                action="https://formsubmit.co/andantecontact@proton.me" method="POST">
+                <!-- FormSubmit config: no captcha page, table layout in the email,
+                     honeypot for bots. -->
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_subject" id="book-a-demo-subject" value="Andante demo request">
+                <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off"
+                    aria-hidden="true">
                 <label class="text-note font-medium">
                     Name
                     <input type="text" name="name" required placeholder="Your name"
@@ -512,9 +524,10 @@
                     <textarea name="message" rows="3" placeholder="How could Andante help your service?"
                         class="mt-1 w-full border border-border rounded-card px-4 py-3 text-body focus:outline-none focus:border-sky resize-none"></textarea>
                 </label>
-                <button type="submit"
-                    class="mt-2 inline-flex items-center justify-center rounded-full bg-navy text-white font-medium text-body px-6 py-[14px] hover:bg-sky transition-colors">Request
+                <button type="submit" id="book-a-demo-submit"
+                    class="mt-2 inline-flex items-center justify-center rounded-full bg-navy text-white font-medium text-body px-6 py-[14px] hover:bg-sky transition-colors disabled:opacity-60 disabled:cursor-not-allowed">Request
                     a demo</button>
+                <p id="book-a-demo-status" class="modal-status" role="status" aria-live="polite" hidden></p>
             </form>
         </div>
     </div>

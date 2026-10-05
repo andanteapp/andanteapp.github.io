@@ -189,6 +189,34 @@ body {
     background: rgba(46, 89, 143, 0.08);
 }
 
+/* Status line inside the demo request form, driven by scripts.js
+   (data-state: pending | success | error). Plain CSS on purpose: the state
+   classes are added at runtime, so Tailwind's scanner never sees them. */
+.modal-status {
+    margin-top: 0.25rem;
+    font-size: var(--text-note, 15px);
+    line-height: 1.45;
+}
+.modal-status[hidden] {
+    display: none;
+}
+.modal-status[data-state="pending"] {
+    color: var(--color-navy, #2E598F);
+}
+.modal-status[data-state="success"] {
+    color: var(--color-green, #00BA88);
+}
+.modal-status[data-state="error"] {
+    color: var(--color-red, #EF8481);
+}
+.modal-status[data-state="notice"] {
+    color: var(--color-orange, #FC9C57);
+}
+.modal-status a {
+    color: var(--color-sky, #65A4E5);
+    text-decoration: underline;
+}
+
 /* === Lightbox (fullscreen image viewer) — opened by scripts.js === */
 .lightbox {
     position: fixed;
