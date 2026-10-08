@@ -12,15 +12,11 @@
     --color-navy: #2E598F;
     --color-sky: #65A4E5;
     /* used by text-sky / bg-sky / hover:bg-sky in the markup */
-    --color-sky-blue: #65A4E5;
-    /* design-system name */
     --color-purple: #8883F0;
     --color-green: #00BA88;
     --color-red: #EF8481;
     --color-orange: #FC9C57;
     --color-white: #FFFFFF;
-    --color-surface: #FFFFFF;
-    --color-link-green: #00BA88;
     --color-mist: #EAF2FF;
     /* light sky section background */
     --color-mist-deep: #dcecff;
@@ -32,7 +28,6 @@
 
     /* ---- Typography ---- */
     --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
     /* Type scale — from agent/andante-design-system.html.
        Responsive values (84/68/45, 48/38/30, …) are applied in the markup
@@ -45,10 +40,6 @@
     /* large heading (fluid) */
     --text-h1--line-height: 1.15;
     --text-h1--letter-spacing: -1.2px;
-    --text-h2: clamp(26px, 3.5vw, 36px);
-    /* section heading (fluid) */
-    --text-h2--line-height: 1.3;
-    --text-h2--letter-spacing: -0.9px;
     --text-h3: clamp(20px, 3vw, 24px);
     /* card heading (fluid) */
     --text-h3--line-height: 1.1;
@@ -57,14 +48,15 @@
     /* eyebrow, w400 uppercase */
     --text-eyebrow--line-height: 1.2;
     --text-eyebrow--letter-spacing: 2.02px;
-    --text-editorial: 30px;
-    /* editorial accent, w600 */
-    --text-editorial--line-height: 1.3;
 
     /* Hero headline (custom, reduced per request) */
     --text-hero: clamp(38px, 5vw, 60px);
     /* hero headline (fluid, reduced) */
     --text-hero--line-height: 1.12;
+
+    /* Navbar wordmark (requested size) */
+    --text-logo: 28px;
+    --text-logo--line-height: 1.2;
 
     /* Body & small text */
     --text-body: 17px;
@@ -72,14 +64,8 @@
     --text-meta: 13px;
 
     /* ---- Buttons & spacing (design-system tokens) ---- */
-    --color-button-primary: #2E598F;
-    --button-radius: 40px;
-    --radius-button: 40px;
-    /* rounded-button utility */
     --radius-card: 22px;
     /* rounded-card utility (cards) */
-    --widget-gap: 20px;
-    --content-max: 1360px;
 
     /* ---- Layout ---- */
     --max-width-content: 1360px;
@@ -87,7 +73,6 @@
     /* ---- Elevation ---- */
     --shadow: #2E598F38;
     --shadow-brand: 0 10px 30px rgb(46 89 143 / 0.22);
-    --shadow-screen: 0 12px 24px rgb(46 89 143 / 0.14);
 }
 
 /* --- small custom rules (Tailwind handles the rest via utility classes) --- */
