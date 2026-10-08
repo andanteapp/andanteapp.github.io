@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 /* ---------------------------------------------------------------
    Andante design-system theme (Tailwind CSS v4).
    This is the SOURCE of truth for the site's classes.
@@ -27,20 +28,28 @@
     /* hairline borders */
 
     /* ---- Typography ---- */
+    --text-lg: clamp(16px, 2.6vh, 1.125rem);
+    /* body copy (was the fixed Tailwind 18px) */
+    --text-xl: clamp(17px, 2.9vh, 1.25rem);
+    /* lead copy (was 20px) */
     --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
     /* Type scale — from agent/andante-design-system.html.
        Responsive values (84/68/45, 48/38/30, …) are applied in the markup
        with the md:/lg: utilities on top of these tokens. */
-    --text-display: clamp(45px, 6vw, 84px);
+    --text-display: clamp(34px, min(6vw, 7vh), 84px);
     /* hero display (fluid) */
     --text-display--line-height: 1.12;
     --text-display--letter-spacing: -0.025em;
-    --text-h1: clamp(30px, 4.5vw, 48px);
+    --text-h1: clamp(24px, min(4.5vw, 5.4vh), 48px);
     /* large heading (fluid) */
     --text-h1--line-height: 1.15;
     --text-h1--letter-spacing: -1.2px;
-    --text-h3: clamp(20px, 3vw, 24px);
+    --text-h2: clamp(20px, min(3.5vw, 4.2vh), 36px);
+    /* mid heading, grouped blocks inside a section (fluid) */
+    --text-h2--line-height: 1.3;
+    --text-h2--letter-spacing: -0.9px;
+    --text-h3: clamp(17px, min(3vw, 3.5vh), 24px);
     /* card heading (fluid) */
     --text-h3--line-height: 1.1;
     --text-h3--letter-spacing: -0.6px;
@@ -50,7 +59,7 @@
     --text-eyebrow--letter-spacing: 2.02px;
 
     /* Hero headline (custom, reduced per request) */
-    --text-hero: clamp(38px, 5vw, 60px);
+    --text-hero: clamp(30px, min(5vw, 6.4vh), 60px);
     /* hero headline (fluid, reduced) */
     --text-hero--line-height: 1.12;
 
@@ -59,13 +68,28 @@
     --text-logo--line-height: 1.2;
 
     /* Body & small text */
-    --text-body: 17px;
-    --text-note: 15px;
+    --text-body: clamp(15px, 2.2vh, 17px);
+    --text-note: clamp(13px, 2vh, 15px);
     --text-meta: 13px;
 
     /* ---- Buttons & spacing (design-system tokens) ---- */
     --radius-card: 22px;
     /* rounded-card utility (cards) */
+
+    /* ---- Fluid vertical rhythm ----
+       The site is read on laptop windows that leave ~630px of viewport and on tall
+       monitors. Gaps, card padding and section breathing room carry a vh term as well
+       as a px ceiling, so a short window compresses the whole rhythm smoothly instead
+       of relying on a breakpoint at one specific screen size. Use them as utilities:
+       mt-flow-lg, p-card, gap-flow-md, space-y-flow-sm … */
+    --spacing-flow-sm: clamp(0.75rem, 2vh, 1.5rem);
+    --spacing-flow: clamp(0.875rem, 2.6vh, 2rem);
+    --spacing-flow-md: clamp(1rem, 3.2vh, 2.5rem);
+    --spacing-flow-lg: clamp(1.25rem, 4vh, 3rem);
+    --spacing-flow-xl: clamp(1.5rem, 5vh, 4rem);
+    --spacing-card-sm: clamp(0.75rem, 1.8vh, 1rem);
+    --spacing-card: clamp(0.875rem, 2.2vh, 1.5rem);
+    --spacing-card-lg: clamp(1rem, 2.6vh, 2rem);
 
     /* ---- Layout ---- */
     --max-width-content: 1360px;
@@ -77,8 +101,50 @@
 
 /* --- small custom rules (Tailwind handles the rest via utility classes) --- */
 
+/* Vertical breathing room shared by EVERY section. FLUID, not fixed: the vh term
+   makes it shrink on a short window (a 1280x832 laptop leaves ~630px of viewport,
+   where it resolves to ~38px) and grow back to 64px/96px on a tall screen. Single
+   source of truth: change the two clamps and the whole site follows. */
+/* The section breathing room and the arrow that lives inside it are driven by the
+   SAME variable, and the arrow is a fraction of it — that is what guarantees the
+   arrow can never land on top of the text, at any window height. */
+:root {
+    --section-pad-y: clamp(1.25rem, 4vh, 4rem);
+    --section-arrow-size: clamp(1.25rem, calc(var(--section-pad-y) * 0.72), 2.75rem);
+    /* the arrow also gets a slice of its own room, so it never sits tight against
+       the last line of content */
+    --section-pad-bottom: calc(var(--section-pad-y) + var(--section-arrow-size) * 0.6);
+}
+
+@media (min-width: 48rem) {
+    :root {
+        --section-pad-y: clamp(1.75rem, 6vh, 6rem);
+    }
+}
+
+/* Phones: the arrow there is a touch target, so it gets a real size plus its own
+   room below the content. Mobile sections are several screens tall anyway, so the
+   extra height costs nothing. */
+@media (max-width: 47.99rem) {
+    :root {
+        --section-arrow-size: 2.5rem;
+        --section-pad-bottom: calc(var(--section-pad-y) + 2.5rem);
+    }
+}
+
+.section-pad {
+    padding-top: var(--section-pad-y);
+    padding-bottom: var(--section-pad-bottom);
+}
+
 html {
     scroll-behavior: smooth;
+}
+
+/* Deep links (#section on first load, or a hand-typed URL) land under the sticky
+   header without this; the header is h-18 = 4.5rem, plus a hairline. */
+section[id] {
+    scroll-margin-top: 0.75rem;
 }
 
 body {
@@ -342,4 +408,58 @@ body.lightbox-open {
 .carousel-dots button.active {
     background: var(--color-navy, #2E598F);
     border-color: var(--color-navy, #2E598F);
+}
+
+/* === Section arrow: centered link at the bottom of each section, pointing to the
+   next one. Positioned ABSOLUTE inside the section's bottom breathing room, so it
+   never adds height and the section rhythm stays exactly as .section-pad defines.
+   A plain anchor: html{scroll-behavior:smooth} already animates the jump. === */
+.section-arrow {
+    position: absolute;
+    left: 50%;
+    /* centred in whatever room the bottom padding leaves: (room - arrow) / 2 */
+    bottom: calc((var(--section-pad-bottom) - var(--section-arrow-size)) / 2);
+    /* centering via `translate` (not `transform`) so the bounce keyframes below,
+       which animate transform, do not fight it */
+    translate: -50% 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--section-arrow-size);
+    height: var(--section-arrow-size);
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    color: var(--color-navy);
+    box-shadow: 0 4px 14px rgb(46 89 143 / 0.12);
+    animation: arrow-bounce 1.8s ease-in-out infinite;
+}
+
+.section-arrow svg {
+    width: calc(var(--section-arrow-size) * 0.48);
+    height: calc(var(--section-arrow-size) * 0.48);
+}
+
+.section-arrow:hover,
+.section-arrow:focus-visible {
+    color: var(--color-sky);
+    border-color: var(--color-sky);
+}
+
+/* gentle bounce: the arrow invites the scroll without being noisy */
+@keyframes arrow-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .section-arrow {
+        animation: none;
+    }
 }

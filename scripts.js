@@ -77,6 +77,53 @@ function initAndante() {
     }, 3000);
   });
 
+  /* Anchor navigation. Sections are sized by their content + .section-pad, not by
+     the screen, so a plain #anchor jump parks the target at the very top: its first
+     96px hide behind the sticky header and the whole next section peeks in below.
+     Centre the target instead, and fall back to "just under the header" when the
+     section is taller than the viewport (mobile). Links with no real target (the
+     "#book-a-demo" CTAs open the modal) are left alone. */
+  var header = document.querySelector('header');
+
+  function scrollToAnchor(target) {
+    var vh = window.innerHeight;
+    var box = target.getBoundingClientRect();
+    var docTop = window.scrollY + box.top;
+    var hh = header ? header.getBoundingClientRect().height : 0;
+    /* A section already carries .section-pad on top (96px desktop / 64px mobile),
+       which by itself clears the 73px sticky header — so the anchor must NOT add
+       another header-sized offset on top of it, or the heading sinks and the bottom
+       arrow (which sits in the section's bottom padding) goes off screen. */
+    var padTop = parseFloat(getComputedStyle(target.firstElementChild).paddingTop) || 0;
+    var top = (box.height <= vh)
+      ? docTop - (vh - box.height) / 2                    /* fits: centre it on screen */
+      : docTop - Math.max(0, hh + 8 - padTop);            /* taller: only what the padding misses */
+    var maxTop = Math.max(0, document.documentElement.scrollHeight - vh);
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({
+      top: Math.round(Math.max(0, Math.min(top, maxTop))),
+      /* 'instant', not 'auto': 'auto' would resolve to the stylesheet's
+         scroll-behavior (smooth) and ignore the reduced-motion preference */
+      behavior: reduced ? 'instant' : 'smooth'
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!link) return;
+    var id = link.getAttribute('href');
+    if (!id || id === '#') return;
+    var target = null;
+    try { target = document.querySelector(id); } catch (err) { return; }
+    if (!target) return;
+    e.preventDefault();
+    scrollToAnchor(target);
+    /* keep the address bar in sync, but never let it trigger its own jump
+       (file:// refuses history updates, hence the guard) */
+    try { history.replaceState(null, '', id); } catch (err) { /* file:// */ }
+  });
+
   /* References accordion (Evidence page) */
   var refToggle = document.getElementById('references-toggle');
   var refBody = document.getElementById('references-body');
