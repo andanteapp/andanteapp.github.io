@@ -38,32 +38,6 @@ function initAndante() {
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
-  /* Animated counters ([data-count]): ease from 0 to the target value in view. */
-  var counters = document.querySelectorAll('[data-count]');
-  if ('IntersectionObserver' in window && counters.length) {
-    var cio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        cio.unobserve(el);
-        var target = parseFloat(el.getAttribute('data-count')) || 0;
-        var dur = parseInt(el.getAttribute('data-duration'), 10) || 1600;
-        var start = null;
-        function step(ts) {
-          if (!start) start = ts;
-          var p = Math.min((ts - start) / dur, 1);
-          var eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased);
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(function (el) { cio.observe(el); });
-  } else {
-    counters.forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
-  }
-
   /* Rotating word ticker ([.vg-tick]): cycle the words in crossfade every 3s. */
   document.querySelectorAll('.vg-tick').forEach(function (tick) {
     var words = Array.prototype.slice.call(tick.querySelectorAll('.vg-tick-word'));
