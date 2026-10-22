@@ -34,34 +34,37 @@
     /* lead copy (was 20px) */
     --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
-    /* Type scale — from agent/andante-design-system.html.
-       Responsive values (84/68/45, 48/38/30, …) are applied in the markup
-       with the md:/lg: utilities on top of these tokens. */
-    --text-display: clamp(34px, min(6vw, 7vh), 84px);
-    /* hero display (fluid) */
-    --text-display--line-height: 1.12;
-    --text-display--letter-spacing: -0.025em;
-    --text-h1: clamp(24px, min(4.5vw, 5.4vh), 48px);
-    /* large heading (fluid) */
-    --text-h1--line-height: 1.15;
-    --text-h1--letter-spacing: -1.2px;
-    --text-h2: clamp(20px, min(3.5vw, 4.2vh), 36px);
-    /* mid heading, grouped blocks inside a section (fluid) */
-    --text-h2--line-height: 1.3;
-    --text-h2--letter-spacing: -0.9px;
+    /* Type scale — names match the TAG LEVEL used in index.html, sizes come from
+       agent/andante-design-system.html:
+         text-h1 = the hero display (<h1>, reduced per request)
+         text-h2 = 48px, the DS "Large heading"    -> every section title (<h2>)
+         text-h3 = 24px, the DS "Card heading"     -> every card/item title (<h3>)
+         text-h4 = 36px, the DS "Section heading"  -> a group heading inside a section
+       So the class name IS the tag level: an <h2> always carries text-h2, an <h3>
+       always text-h3. Never mix them (that is what made the scale confusing). */
+    --text-h1: clamp(30px, min(5vw, 6.4vh), 60px);
+    /* hero headline, fluid + reduced */
+    --text-h1--line-height: 1.12;
+    --text-h2: clamp(24px, min(4.5vw, 5.4vh), 48px);
+    /* section titles, fluid */
+    --text-h2--line-height: 1.15;
+    --text-h2--letter-spacing: -1.2px;
     --text-h3: clamp(17px, min(3vw, 3.5vh), 24px);
-    /* card heading (fluid) */
+    /* card / item titles, fluid */
     --text-h3--line-height: 1.1;
     --text-h3--letter-spacing: -0.6px;
+    --text-h4: clamp(20px, min(3.5vw, 4.2vh), 36px);
+    /* group heading inside a section, fluid */
+    --text-h4--line-height: 1.3;
+    --text-h4--letter-spacing: -0.9px;
+    /* Full design-system hero display (84px) — kept available, zero use by request. */
+    --text-display: clamp(34px, min(6vw, 7vh), 84px);
+    --text-display--line-height: 1.12;
+    --text-display--letter-spacing: -0.025em;
     --text-eyebrow: 12px;
     /* eyebrow, w400 uppercase */
     --text-eyebrow--line-height: 1.2;
     --text-eyebrow--letter-spacing: 2.02px;
-
-    /* Hero headline (custom, reduced per request) */
-    --text-hero: clamp(30px, min(5vw, 6.4vh), 60px);
-    /* hero headline (fluid, reduced) */
-    --text-hero--line-height: 1.12;
 
     /* Navbar wordmark (requested size) */
     --text-logo: 28px;
